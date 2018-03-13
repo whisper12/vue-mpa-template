@@ -52,12 +52,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: './src/pages/index/index.html',
-      inject: true,
-      chunks: ['app','vendor','manifest']
-    }),
+    // new HtmlWebpackPlugin({
+    //   filename: 'index.html',
+    //   template: './src/pages/index/index.html',
+    //   inject: true,
+    //   chunks: ['app','vendor','manifest']
+    // }),
     // copy custom static assets
     new CopyWebpackPlugin([
       {
@@ -68,6 +68,19 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     ])
   ]
 })
+
+var pages =  utils.getMultiEntry('./src/pages/**/*.html');
+for (var pathname in pages) {
+  // 配置生成的html文件，定义路径等
+  var conf = {
+    filename: pathname + '.html',
+    template: pages[pathname], // 模板路径
+    chunks: [pathname, 'vendors', 'manifest'], // 每个html引用的js模块
+    inject: true              // js插入位置
+  };
+  // 需要生成几个html文件，就配置几个HtmlWebpackPlugin对象
+  devWebpackConfig.plugins.push(new HtmlWebpackPlugin(conf));
+}
 
 module.exports = new Promise((resolve, reject) => {
   portfinder.basePort = process.env.PORT || config.dev.port

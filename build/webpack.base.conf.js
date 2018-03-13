@@ -8,13 +8,11 @@ function resolve (dir) {
   return path.join(__dirname, '..', dir)
 }
 
-
+const entries =  utils.getMultiEntry('./src/pages/**/*.js');
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
-  entry: {
-    app: './src/pages/index/main.js'
-  },
+  entry: entries,
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
