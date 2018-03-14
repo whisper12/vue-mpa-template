@@ -126,6 +126,7 @@ for (var pathname in pages) {
   var conf = {
       filename: pathname +'.html',
       template: pages[pathname],
+      chunks: ['vendor','manifest',pathname],
       inject: true,
       minify: {
         removeComments: false,
